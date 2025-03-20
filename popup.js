@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  
   loginButton.addEventListener('click', () => {
     const username = usernameInput.value;
     const password = passwordInput.value;

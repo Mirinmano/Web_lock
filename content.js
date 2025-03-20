@@ -1,21 +1,17 @@
 async function isSiteLocked() {
   return new Promise((resolve) => {
-    // Get the current user
     chrome.storage.sync.get(['currentUser'], (result) => {
       const currentUser = result.currentUser;
 
       if (!currentUser) {
-        // If no user is logged in, the site cannot be locked
         resolve(false);
         return;
       }
 
-      // Get the locked sites for the current user
       chrome.storage.sync.get([`lockedSites_${currentUser}`], (result) => {
         const lockedSites = result[`lockedSites_${currentUser}`] || [];
         const currentSite = new URL(window.location.href).hostname;
 
-        // Check if the current site is in the locked sites list
         resolve(lockedSites.includes(currentSite));
       });
     });
@@ -23,12 +19,10 @@ async function isSiteLocked() {
 }
 
 function createCustomAlert(message) {
-  // Check if an alert already exists
   if (document.getElementById('custom-alert')) {
     return;
   }
 
-  // Create overlay
   const overlay = document.createElement('div');
   overlay.id = 'custom-alert-overlay';
   overlay.style.position = 'fixed';
@@ -42,7 +36,6 @@ function createCustomAlert(message) {
   overlay.style.justifyContent = 'center';
   overlay.style.alignItems = 'center';
 
-  // Create alert box
   const alertBox = document.createElement('div');
   alertBox.id = 'custom-alert';
   alertBox.style.backgroundColor = '#fff';
@@ -53,13 +46,11 @@ function createCustomAlert(message) {
   alertBox.style.textAlign = 'center';
   alertBox.style.fontFamily = 'Arial, sans-serif';
 
-  // Alert message
   const alertMessage = document.createElement('p');
   alertMessage.textContent = message;
   alertMessage.style.marginBottom = '15px';
   alertMessage.style.fontSize = '16px';
 
-  // Close button
   const closeButton = document.createElement('button');
   closeButton.textContent = 'OK';
   closeButton.style.padding = '8px 15px';
@@ -72,14 +63,12 @@ function createCustomAlert(message) {
     document.body.removeChild(overlay);
   };
 
-  // Append elements
   alertBox.appendChild(alertMessage);
   alertBox.appendChild(closeButton);
   overlay.appendChild(alertBox);
   document.body.appendChild(overlay);
 }
 
-// Replace default alert
 window.alert = function (message) {
   createCustomAlert(message);
 };
@@ -125,7 +114,6 @@ function createLoginOverlay() {
 }
 
 function createPopupOverlay(content) {
-  // Create the overlay container
   const overlay = document.createElement('div');
   overlay.id = 'analysis-popup-overlay';
   overlay.style.position = 'fixed';
@@ -133,27 +121,25 @@ function createPopupOverlay(content) {
   overlay.style.left = '0';
   overlay.style.width = '100%';
   overlay.style.height = '100%';
-  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'; // Semi-transparent black background
-  overlay.style.backdropFilter = 'blur(5px)'; // Blur effect
+  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'; 
+  overlay.style.backdropFilter = 'blur(5px)'; 
   overlay.style.zIndex = '1000';
   overlay.style.display = 'flex';
   overlay.style.justifyContent = 'center';
   overlay.style.alignItems = 'center';
 
-  // Create the popup box
   const popupBox = document.createElement('div');
-  popupBox.style.backgroundColor = 'gray'; // Dark blue-gray background
-  popupBox.style.color = 'white'; // Light gray text color
+  popupBox.style.backgroundColor = 'gray'; 
+  popupBox.style.color = 'white'; 
   popupBox.style.padding = '20px';
   popupBox.style.borderRadius = '10px';
   popupBox.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.3)';
-  popupBox.style.maxWidth = '50%'; // 50-60% of the screen width
+  popupBox.style.maxWidth = '50%'; 
   popupBox.style.width = '100%';
-  popupBox.style.maxHeight = '80%'; // 70-80% of the screen height
-  popupBox.style.overflowY = 'auto'; // Enable vertical scrolling
+  popupBox.style.maxHeight = '80%'; 
+  popupBox.style.overflowY = 'auto'; 
   popupBox.style.fontFamily = 'Arial, sans-serif';
 
-  // Format the content with titles and lists
   const formattedContent = `
     <h2 style="color: #3498db; margin-top: 1; text-align: center;">Terms & Conditions</h2><br>
     <h3 style="color: #3498db;">Description</h3>
@@ -168,7 +154,6 @@ function createPopupOverlay(content) {
     </ul>
   `;
 
-  // Add formatted content to the popup box
   popupBox.innerHTML = `
     <div id="analysis-content" style="margin-bottom: 20px;">
       ${formattedContent}
@@ -180,22 +165,16 @@ function createPopupOverlay(content) {
     </div>
   `;
 
-  // Append the popup box to the overlay
   overlay.appendChild(popupBox);
-
-  // Append the overlay to the body
   document.body.appendChild(overlay);
 
-  // Close button functionality
   document.getElementById('close-popup').addEventListener('click', () => {
     overlay.remove();
   });
 
-  // Accept button functionality
   document.getElementById('accept-popup').addEventListener('click', () => {
     const currentSite = new URL(window.location.href).hostname;
   
-    // Get the current user
     chrome.storage.sync.get(['currentUser'], (result) => {
       const currentUser = result.currentUser;
   
@@ -204,11 +183,9 @@ function createPopupOverlay(content) {
         return;
       }
   
-      // Get the locked sites for the current user
       chrome.storage.sync.get([`lockedSites_${currentUser}`], (result) => {
         const lockedSites = result[`lockedSites_${currentUser}`] || [];
   
-        // Add the current site if it's not already locked
         if (!lockedSites.includes(currentSite)) {
           lockedSites.push(currentSite);
           chrome.storage.sync.set({ [`lockedSites_${currentUser}`]: lockedSites }, () => {
@@ -221,7 +198,6 @@ function createPopupOverlay(content) {
       });
     });
   
-    // Remove the overlay (assuming `overlay` is defined elsewhere)
     overlay.remove();
   });
 
@@ -315,7 +291,7 @@ function createChatOverlay(content) {
       ]
     };
 
-    const api_key = 'AIzaSyDvHWTKIxHxGo1IWwEPZNqzvnBYuzUFVDc'; // Replace with your actual API key
+    const api_key = 'AIzaSyDvHWTKIxHxGo1IWwEPZNqzvnBYuzUFVDc'; 
     fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${api_key}`, {
       method: 'POST',
       headers: {
@@ -383,9 +359,9 @@ function hideLoadingSpinner() {
 
 
 async function addFloatingLockButton() {
-  const locked = await isSiteLocked(); // Check if the site is locked
+  const locked = await isSiteLocked(); 
   if (locked) {
-    return; // Do not add the floating lock button if the site is locked
+    return; 
   }
 
   const lockButton = document.createElement('button');0
@@ -444,7 +420,7 @@ async function addFloatingLockButton() {
 
     showLoadingSpinner();
 
-    const api_key = 'AIzaSyDvHWTKIxHxGo1IWwEPZNqzvnBYuzUFVDc'; // Replace with your actual API key
+    const api_key = 'AIzaSyDvHWTKIxHxGo1IWwEPZNqzvnBYuzUFVDc'; 
     fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${api_key}`, {
       method: 'POST',
       headers: {
@@ -455,12 +431,10 @@ async function addFloatingLockButton() {
     .then(response => response.json())
     .then(data => {
       hideLoadingSpinner();
-      // Parse the JSON string in the response
       const responseText = data.candidates[0].content.parts[0].text;
       try {
-        // Remove Markdown code block syntax if present
         const jsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const content = JSON.parse(jsonString); // Parse the JSON string into an object
+        const content = JSON.parse(jsonString); 
         createPopupOverlay(content);
       } catch (error) {
         console.error('Error parsing JSON:', error);
@@ -492,4 +466,3 @@ async function addFloatingLockButton() {
   addFloatingLockButton();
 })();
 
-// Add a confirmation dialog in your extension's popup or options page

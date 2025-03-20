@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Website Locker",
+  "version": "1.0",
+  "description": "Lock websites with a password and manage locked sites.",
+  "permissions": ["storage", "tabs", "cookies", "activeTab", "management", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/shield.png"
+    }
+  },
+  "icons": {
+    "16": "icons/shield.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["login.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

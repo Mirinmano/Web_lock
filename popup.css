@@ -1,0 +1,347 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #050816;
+  --panel: rgba(11, 20, 40, 0.9);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text: #f8fbff;
+  --muted: #9aa6c3;
+  --primary: #6c63ff;
+  --primary-hover: #5850d6;
+  --danger: #ff6b6b;
+  --danger-hover: #e34949;
+  --outline: rgba(255, 255, 255, 0.12);
+  --success: #34d399;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  width: 380px;
+  height: 560px;
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(circle at top, #1d2b64 0%, #050816 55%, #010203 100%);
+}
+
+.popup-shell {
+  height: 100%;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-header {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px);
+}
+
+.app-badge {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: rgba(108, 99, 255, 0.2);
+  display: grid;
+  place-items: center;
+}
+
+.app-badge img {
+  width: 32px;
+  height: 32px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0 0 4px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.panel-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--outline);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.button-grid.vertical {
+  grid-template-columns: 1fr;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
+  color: white;
+  box-shadow: 0 10px 20px rgba(108, 99, 255, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-hover), #7c3aed);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.btn-subtle {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+}
+
+.btn-subtle:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
+
+.site-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.site-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.site-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.site-favicon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px;
+}
+
+.suggestion-badge {
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(108, 99, 255, 0.2);
+  color: var(--primary);
+}
+
+.site-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.site-domain {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.site-meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.empty-state {
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  padding: 14px;
+  text-align: center;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.suggestions-list .btn {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.alert-popup {
+  position: fixed;
+  inset: 14px 14px auto auto;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 170, 0, 0.92);
+  color: #0f1729;
+  font-weight: 600;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f2f4ff;
+    --panel: #ffffff;
+    --text: #0b1020;
+    --muted: #5f6b85;
+  }
+
+  body {
+    background: radial-gradient(circle at top, #eef0ff 0%, #d7dcff 55%, #b5c2ff 100%);
+  }
+
+  .panel {
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
+  }
+
+  .btn-ghost {
+    background: rgba(15, 23, 42, 0.05);
+    color: #0b1020;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(15, 23, 42, 0.08);
+  }
+}
+

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Website Locked</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #050816 0%, #0b1428 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #f8fbff;
+    }
+
+    .lock-container {
+      background: rgba(11, 20, 40, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 48px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      text-align: center;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .lock-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #f8fbff;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #9aa6c3;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .site-info {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #9aa6c3;
+    }
+
+    .site-name {
+      color: #6c63ff;
+      font-weight: 500;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #f8fbff;
+      font-size: 18px;
+      font-family: monospace;
+      text-align: center;
+      letter-spacing: 12px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .pin-input::placeholder {
+      letter-spacing: 4px;
+      color: #9aa6c3;
+    }
+
+    .pin-input:focus {
+      outline: none;
+      border-color: rgba(108, 99, 255, 0.5);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    }
+
+    .unlock-button {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #6c63ff 0%, #5850d6 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .unlock-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.4);
+    }
+
+    .unlock-button:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 12px;
+      min-height: 20px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="lock-container">
+    <div class="lock-icon">🔒</div>
+    <h1>Website Locked</h1>
+    <p class="subtitle">Enter your unlock PIN to access this site</p>
+    <div class="site-info">
+      Locked site: <span class="site-name" id="locked-site-name">Loading...</span>
+    </div>
+    <input 
+      type="password" 
+      id="unlock-pin" 
+      class="pin-input" 
+      placeholder="Enter PIN" 
+      pattern="[0-9]{4,6}" 
+      maxlength="6"
+      autofocus
+    />
+    <button id="unlock-button" class="unlock-button">Unlock</button>
+    <div id="error-message" class="error-message"></div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="cache.js"></script>
+  <script src="lock.js"></script>
+</body>
+</html>
+

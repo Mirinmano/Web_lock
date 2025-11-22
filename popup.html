@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Website Locker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-shell">
+    <header class="app-header">
+      <div class="app-badge">
+        <img src="icons/shield.png" alt="Website Locker shield">
+      </div>
+      <div>
+        <p class="eyebrow">Focus-first security</p>
+        <h1>Website Locker</h1>
+        <p class="subtitle">Lock distractors, stay in the flow.</p>
+      </div>
+    </header>
+
+    <section id="login-section" class="panel view" data-view="login-section">
+      <div class="panel-header">
+        <h2>Sign in</h2>
+        <p>Enter your credentials to access your locked sites.</p>
+      </div>
+      <form id="login-form" class="stack">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="login-email" placeholder="you@example.com" required>
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </label>
+        <div class="button-grid">
+          <button type="button" id="login-button" class="btn btn-primary">Log in</button>
+          <button type="button" id="go-to-register-button" class="btn btn-ghost">Create account</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="register-section" class="panel view hidden" data-view="register-section">
+      <div class="panel-header">
+        <h2>Create account</h2>
+        <p>Set up your account to start locking websites.</p>
+      </div>
+      <form id="register-form" class="stack">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="register-email" placeholder="you@example.com" required>
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="register-password" placeholder="••••••••" required>
+        </label>
+        <label class="field">
+          <span>Confirm Password</span>
+          <input type="password" id="register-confirm-password" placeholder="••••••••" required>
+        </label>
+        <label class="field">
+          <span>Unlock PIN</span>
+          <input type="password" id="register-pin" placeholder="4-6 digits" pattern="[0-9]{4,6}" maxlength="6" required>
+          <small style="color: var(--muted); font-size: 12px; margin-top: 4px;">Use this PIN to unlock locked sites</small>
+        </label>
+        <div class="button-grid">
+          <button type="button" id="register-button" class="btn btn-primary">Create account</button>
+          <button type="button" id="go-to-login-button" class="btn btn-ghost">Back to login</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="main-section" class="panel view hidden" data-view="main-section">
+      <div class="panel-header">
+        <div>
+          <h2>Your locked sites</h2>
+          <p>Sites stay blocked until you remove them.</p>
+        </div>
+        <button id="logout-button" class="btn btn-subtle">Switch user</button>
+      </div>
+
+      <ul id="locked-sites-list" class="site-list"></ul>
+      <div id="empty-state" class="empty-state hidden">
+        <p>No sites locked yet.</p>
+        <p>Add the current tab or use AI to discover focus drains.</p>
+      </div>
+
+      <div class="button-grid vertical">
+        <button id="add-site-button" class="btn btn-primary">
+          <span>Add current site</span>
+        </button>
+        <button id="get-suggestions-button" class="btn btn-ghost">
+          <span>Get AI suggestions</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="ai-suggestions-popup" class="panel view hidden" data-view="ai-suggestions-popup">
+      <div class="panel-header">
+        <div>
+          <h2>AI suggestions</h2>
+          <p>Insights based on your browsing frequency.</p>
+        </div>
+        <button id="close-ai-suggestions-button" class="btn btn-subtle">Back</button>
+      </div>
+      <ul id="ai-suggestions-list" class="site-list suggestions-list"></ul>
+      <p id="suggestions-empty" class="empty-state hidden">No new sites to lock right now.</p>
+    </section>
+
+    <section id="logout-section" class="panel view hidden" data-view="logout-section">
+      <div class="panel-header">
+        <h2>Confirm logout</h2>
+        <p>Enter your password to secure this device.</p>
+      </div>
+      <form id="logout-form" class="stack">
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="logout-password" placeholder="••••••••" required>
+        </label>
+        <div class="button-grid">
+          <button type="button" id="logout-submit-button" class="btn btn-danger">Logout</button>
+          <button type="button" id="cancel-logout-button" class="btn btn-ghost">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="remove-site-verification" class="panel view hidden" data-view="remove-site-verification">
+      <div class="panel-header">
+        <h2>Verify identity</h2>
+        <p>Enter your unlock PIN to remove this site.</p>
+      </div>
+      <form id="remove-site-form" class="stack">
+        <label class="field">
+          <span>Unlock PIN</span>
+          <input type="password" id="verify-pin" placeholder="Enter your PIN" pattern="[0-9]{4,6}" maxlength="6" required>
+        </label>
+        <div class="button-grid">
+          <button type="button" id="verify-remove-button" class="btn btn-primary">Verify</button>
+          <button type="button" id="cancel-verify-button" class="btn btn-ghost">Cancel</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="alert-popup" class="alert-popup">⚠️ Warning: Incorrect Username or Password!</div>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="cache.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

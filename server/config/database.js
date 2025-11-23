@@ -1,32 +1,27 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Support both DATABASE_URL (connection string) and individual parameters
 let poolConfig;
+const sslMode = String(process.env.DB_SSL || process.env.PGSSLMODE || 'require').toLowerCase();
+const useSsl = !['false', 'disable', '0', 'off'].includes(sslMode);
+const sslOption = useSsl ? { rejectUnauthorized: false } : false;
 
 if (process.env.DATABASE_URL) {
-  // Use connection string (preferred for Aiven)
   poolConfig = {
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false, // Aiven uses SSL certificates
-    },
+    ssl: sslOption,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
   };
 } else {
-  // Fallback to individual parameters
   poolConfig = {
     host: process.env.AIVEN_HOST,
     port: process.env.AIVEN_PORT,
     database: process.env.AIVEN_DATABASE,
     user: process.env.AIVEN_USER,
     password: process.env.AIVEN_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false, // Aiven uses SSL certificates
-      ...(process.env.AIVEN_SSL_MODE === 'require' && { require: true })
-    },
+    ssl: sslOption,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
@@ -35,7 +30,6 @@ if (process.env.DATABASE_URL) {
 
 const pool = new Pool(poolConfig);
 
-// Test connection
 pool.on('connect', () => {
   console.log('✅ Connected to Aiven PostgreSQL database');
 });

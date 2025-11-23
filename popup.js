@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   const lockedSitesList = document.getElementById('locked-sites-list');
-<<<<<<< HEAD
   const emptyState = document.getElementById('empty-state');
   const addSiteButton = document.getElementById('add-site-button');
   const loginButton = document.getElementById('login-button');
@@ -59,27 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-=======
-  const addSiteButton = document.getElementById('add-site-button');
-  const loginButton = document.getElementById('login-button');
-  const registerButton = document.getElementById('register-button');
-  const logoutButton = document.getElementById('logout-button');
-  const usernameInput = document.getElementById('username');
-  const passwordInput = document.getElementById('password');
-  const logoutSection = document.getElementById('logout-section');
-  const logoutUsernameInput = document.getElementById('logout-username');
-  const logoutPasswordInput = document.getElementById('logout-password');
-  const logoutSubmitButton = document.getElementById('logout-submit-button');
-  const cancelLogoutButton = document.getElementById('cancel-logout-button');
-  const verifyUsernameInput = document.getElementById('verify-username');
-  const verifyPasswordInput = document.getElementById('verify-password');
-  const verifyRemoveButton = document.getElementById('verify-remove-button');
-  const cancelVerifyButton = document.getElementById('cancel-verify-button');
-  const alertBox = document.getElementById('alert-popup'); 
-
-  let currentUser = null;
-  let siteToRemove = null; 
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
 
   function showAlert(message) {
     alertBox.innerText = `${message}`;
@@ -95,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showSection(sectionId) {
-<<<<<<< HEAD
     viewContainers.forEach((view) => view.classList.add('hidden'));
     const target = document.querySelector(`[data-view="${sectionId}"]`);
     if (target) {
@@ -160,7 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (emptyState) {
         emptyState.classList.toggle('hidden', lockedSites.length !== 0);
       }
-    });
+    } catch (error) {
+      console.error('Failed to load locked sites:', error);
+      showAlert('Failed to load sites');
+    }
   }
 
   goToRegisterButton.addEventListener('click', () => {
@@ -257,100 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           showAlert('Failed to add site: ' + (error.message || 'Unknown error'));
         }
-=======
-    document.querySelectorAll('div').forEach((div) => div.classList.add('hidden'));
-    document.getElementById(sectionId).classList.remove('hidden');
-  }
-
-  chrome.storage.sync.get(['currentUser'], (result) => {
-    if (result.currentUser) {
-      currentUser = result.currentUser;
-      showSection('main-section');
-      loadLockedSites(currentUser);
-    } else {
-      showSection('login-register-section');
-    }
-  });
-
-  function showSection(sectionId) {
-    document.querySelectorAll('div').forEach((div) => div.classList.add('hidden'));
-    document.getElementById(sectionId).classList.remove('hidden');
-  }
-
-  function loadLockedSites(username) {
-    chrome.storage.sync.get([`lockedSites_${username}`], (result) => {
-      const lockedSites = result[`lockedSites_${username}`] || [];
-      lockedSitesList.innerHTML = '';
-
-      lockedSites.forEach((site) => {
-        const li = document.createElement('li');
-
-        const faviconUrl = `https://www.google.com/s2/favicons?domain=${site}&sz=32`;
-
-        li.innerHTML = `
-          <img src="${faviconUrl}" alt="Favicon" class="site-favicon" style="width: 15px; height: 15px;">
-          <span>${site}</span>
-          <button class="remove-site-button" data-site="${site}">Remove</button>
-        `;
-
-        lockedSitesList.appendChild(li);
-      });
-    });
-  }
-
-  loginButton.addEventListener('click', () => {
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    chrome.storage.sync.get([`user_${username}`], (result) => {
-      const storedPassword = result[`user_${username}`];
-
-      if (storedPassword && storedPassword === password) {
-        currentUser = username;
-        chrome.storage.sync.set({ currentUser }, () => {
-          showSection('main-section');
-          loadLockedSites(currentUser);
-        });
-      } else {
-        showAlert('Invalid username or password');
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
       }
     });
   });
 
-<<<<<<< HEAD
-=======
-  registerButton.addEventListener('click', () => {
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    chrome.storage.sync.get([`user_${username}`], (result) => {
-      if (result[`user_${username}`]) {
-        showAlert('Username already exists');
-      } else {
-        chrome.storage.sync.set({ [`user_${username}`]: password }, () => {
-          showAlert('Registration successful! Please login.');
-        });
-      }
-    });
-  });
-
-  addSiteButton.addEventListener('click', () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const url = new URL(tabs[0].url).hostname;
-      chrome.storage.sync.get([`lockedSites_${currentUser}`], (result) => {
-        const lockedSites = result[`lockedSites_${currentUser}`] || [];
-        if (!lockedSites.includes(url)) {
-          lockedSites.push(url);
-          chrome.storage.sync.set({ [`lockedSites_${currentUser}`]: lockedSites }, () => {
-            loadLockedSites(currentUser);
-          });
-        }
-      });
-    });
-  });
-
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
   lockedSitesList.addEventListener('click', (e) => {
     if (e.target.classList.contains('remove-site-button')) {
       siteToRemove = e.target.getAttribute('data-site'); 
@@ -358,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-<<<<<<< HEAD
   verifyRemoveButton.addEventListener('click', async () => {
     const pin = verifyPinInput.value;
 
@@ -377,46 +266,17 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       showAlert(error.message || 'Invalid PIN');
     }
-=======
-  verifyRemoveButton.addEventListener('click', () => {
-    const username = verifyUsernameInput.value;
-    const password = verifyPasswordInput.value;
-
-    chrome.storage.sync.get([`user_${username}`], (result) => {
-      const storedPassword = result[`user_${username}`];
-
-      if (username === currentUser && storedPassword === password) {
-        chrome.storage.sync.get([`lockedSites_${currentUser}`], (result) => {
-          const lockedSites = result[`lockedSites_${currentUser}`].filter((s) => s !== siteToRemove);
-          chrome.storage.sync.set({ [`lockedSites_${currentUser}`]: lockedSites }, () => {
-            loadLockedSites(currentUser); 
-            showSection('main-section'); 
-            verifyUsernameInput.value = ''; 
-            verifyPasswordInput.value = '';
-          });
-        });
-      } else {
-        showAlert('Invalid username or password');
-      }
-    });
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
   });
 
   cancelVerifyButton.addEventListener('click', () => {
     showSection('main-section'); 
-<<<<<<< HEAD
     verifyPinInput.value = '';
-=======
-    verifyUsernameInput.value = ''; 
-    verifyPasswordInput.value = '';
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
   });
 
   logoutButton.addEventListener('click', () => {
     showSection('logout-section');
   });
 
-<<<<<<< HEAD
   logoutSubmitButton.addEventListener('click', async () => {
     const password = logoutPasswordInput.value;
 
@@ -441,44 +301,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-=======
-  logoutSubmitButton.addEventListener('click', () => {
-    const username = logoutUsernameInput.value;
-    const password = logoutPasswordInput.value;
-
-    chrome.storage.sync.get([`user_${username}`], (result) => {
-      const storedPassword = result[`user_${username}`];
-
-      if (username === currentUser && storedPassword === password) {
-        chrome.storage.sync.remove('currentUser', () => {
-          currentUser = null;
-          showSection('login-register-section');
-          logoutUsernameInput.value = '';
-          logoutPasswordInput.value = '';
-        });
-      } else {
-        showAlert('Invalid username or password');
-      }
-    });
-  });
-  
-  const aiSuggestionsList = document.getElementById('ai-suggestions-list');
-  const getSuggestionsButton = document.getElementById('get-suggestions-button');
-  const aiSuggestionsPopup = document.getElementById('ai-suggestions-popup');
-  const closeAiSuggestionsButton = document.getElementById('close-ai-suggestions-button');
-
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
   getSuggestionsButton.addEventListener('click', async () => {
     chrome.storage.local.get(['websiteFrequency'], async (result) => {
       const frequencyData = result.websiteFrequency || {};
 
       const suggestions = await getAISuggestions(frequencyData);
 
-<<<<<<< HEAD
       await displayAISuggestions(suggestions);
-=======
-      displayAISuggestions(suggestions);
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
       showSection('ai-suggestions-popup');
     });
   });
@@ -487,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showSection('main-section'); 
   });
 
-<<<<<<< HEAD
   async function displayAISuggestions(suggestions) {
     aiSuggestionsList.innerHTML = '';
     try {
@@ -552,39 +380,6 @@ document.addEventListener('DOMContentLoaded', () => {
           showAlert('Failed to lock site: ' + (error.message || 'Unknown error'));
         }
       }
-=======
-  function displayAISuggestions(suggestions) {
-    const aiSuggestionsList = document.getElementById('ai-suggestions-list');
-    aiSuggestionsList.innerHTML = '';
-
-    suggestions.forEach((site) => {
-      chrome.storage.sync.get([`lockedSites_${currentUser}`], (result) => {
-        const lockedSites = result[`lockedSites_${currentUser}`] || [];
-        if (!lockedSites.includes(site)) {
-          const li = document.createElement('li');
-          li.innerHTML = `
-            <span>${site}</span>
-            <button class="lock-suggestion-button" data-site="${site}">Lock</button>
-          `;
-          aiSuggestionsList.appendChild(li);
-        }
-      });
-    });
-  }
-
-  aiSuggestionsList.addEventListener('click', (e) => {
-    if (e.target.classList.contains('lock-suggestion-button')) {
-      const site = e.target.getAttribute('data-site');
-      chrome.storage.sync.get([`lockedSites_${currentUser}`], (result) => {
-        const lockedSites = result[`lockedSites_${currentUser}`] || [];
-        if (!lockedSites.includes(site)) {
-          lockedSites.push(site);
-          chrome.storage.sync.set({ [`lockedSites_${currentUser}`]: lockedSites }, () => {
-            loadLockedSites(currentUser); 
-          });
-        }
-      });
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
     }
   });
 

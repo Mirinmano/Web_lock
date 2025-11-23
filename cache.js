@@ -10,6 +10,14 @@ class CacheService {
     this.CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache TTL
   }
 
+  shouldFallback() {
+    try {
+      return typeof CONFIG !== 'undefined' && !!CONFIG.FALLBACK_TO_STORAGE;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Get cache key for user
   getCacheKey(email) {
     return `${this.CACHE_KEY_PREFIX}${email}`;
@@ -90,11 +98,12 @@ class CacheService {
       await this.setCache(email, sitesWithState);
       return sitesWithState;
     } catch (error) {
-      console.error('Failed to fetch from API, trying cache:', error);
-      // If API fails, try to return stale cache
       const cached = await this.getCachedSites(email);
       if (cached && cached.length > 0) {
         return cached;
+      }
+      if (this.shouldFallback()) {
+        return [];
       }
       throw error;
     }
@@ -171,24 +180,28 @@ class CacheService {
   // Add locked site (updates both DB and cache)
   async addLockedSite(email, site) {
     try {
-      // Add to database via API
       await this.api.addLockedSite(email, site);
-      
-      // Update cache
       const cachedSites = await this.getCachedSites(email);
       const exists = cachedSites.some(s => {
         const siteName = typeof s === 'string' ? s : s.site;
         return siteName === site;
       });
-
       if (!exists) {
         cachedSites.push({ site, state: 0 });
         await this.setCache(email, cachedSites);
       }
-
       return true;
     } catch (error) {
-      console.error('Failed to add locked site:', error);
+      const cachedSites = await this.getCachedSites(email);
+      const exists = cachedSites.some(s => {
+        const siteName = typeof s === 'string' ? s : s.site;
+        return siteName === site;
+      });
+      if (this.shouldFallback() && !exists) {
+        cachedSites.push({ site, state: 0 });
+        await this.setCache(email, cachedSites);
+        return true;
+      }
       throw error;
     }
   }
@@ -196,20 +209,24 @@ class CacheService {
   // Remove locked site (updates both DB and cache)
   async removeLockedSite(email, site) {
     try {
-      // Remove from database via API
       await this.api.removeLockedSite(email, site);
-      
-      // Update cache
       const cachedSites = await this.getCachedSites(email);
       const updatedSites = cachedSites.filter(s => {
         const siteName = typeof s === 'string' ? s : s.site;
         return siteName !== site;
       });
       await this.setCache(email, updatedSites);
-
       return true;
     } catch (error) {
-      console.error('Failed to remove locked site:', error);
+      const cachedSites = await this.getCachedSites(email);
+      const updatedSites = cachedSites.filter(s => {
+        const siteName = typeof s === 'string' ? s : s.site;
+        return siteName !== site;
+      });
+      if (this.shouldFallback()) {
+        await this.setCache(email, updatedSites);
+        return true;
+      }
       throw error;
     }
   }

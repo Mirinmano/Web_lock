@@ -298,7 +298,7 @@ function createPopupOverlay(content) {
     const currentSite = new URL(window.location.href).hostname;
   
     // Get the current user
-    chrome.storage.sync.get(['currentUser'], (result) => {
+    chrome.storage.sync.get(['currentUser'], async (result) => {
       const currentUser = result.currentUser;
   
       if (!currentUser) {
@@ -663,16 +663,15 @@ async function addFloatingLockButton() {
     this.style.boxShadow = '0 4px 16px rgba(108, 99, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)';
   });
   
-  lockButton.addEventListener('active', function() {
-    this.style.transform = 'translateY(-2px) scale(0.98)';
-  });
+  
   
   document.body.appendChild(lockButton);
 
   lockButton.addEventListener('click', async () => {
-    let currentU;
-    chrome.storage.sync.get(['currentUser'], (result) => {
-      currentU = result.currentUser;
+    const currentUser = await new Promise((resolve) => {
+      chrome.storage.sync.get(['currentUser'], (result) => {
+        resolve(result.currentUser);
+      });
     });
     if (!currentUser) {
       alert('Please log in to lock sites.');

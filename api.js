@@ -1,7 +1,9 @@
 // API service for Website Locker Extension
 // Replace chrome.storage calls with API calls to Aiven-backed server
 
-const API_BASE_URL = process.env.API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_URL) ||
+  (typeof process !== 'undefined' && process.env && process.env.API_URL) ||
+  'http://localhost:3000/api';
 
 class ApiService {
   constructor() {

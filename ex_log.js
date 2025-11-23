@@ -17,8 +17,5 @@ document.getElementById('log-button').addEventListener('click', () => {
         document.getElementById('error-message').textContent = 'Invalid credentials.';
       }
     });
-<<<<<<< HEAD
     // Validate credentials (replace with your logic)
-=======
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
   });

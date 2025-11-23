@@ -3,7 +3,7 @@
 
 const CONFIG = {
   USE_API: true, // Set to false to use chrome.storage instead
-  API_URL: 'http://localhost:3000/api', // Update this to your production API URL
+  API_URL: 'http://localhost:3001/api', // Update this to your production API URL
   FALLBACK_TO_STORAGE: true, // Fall back to chrome.storage if API fails
 };
 

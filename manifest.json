@@ -4,10 +4,7 @@
   "version": "1.0",
   "description": "Lock websites with a password and manage locked sites.",
   "permissions": ["storage", "tabs", "cookies", "activeTab", "management", "scripting"],
-<<<<<<< HEAD
   "host_permissions": ["http://localhost:3000/*", "https://*/*"],
-=======
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
   "background": {
     "service_worker": "background.js"
   },
@@ -23,11 +20,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-<<<<<<< HEAD
       "js": ["config.js", "api.js", "cache.js", "content.js"],
-=======
-      "js": ["content.js"],
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
       "css": ["styles.css"]
     }
   ],
@@ -36,11 +29,7 @@
   },
   "web_accessible_resources": [
     {
-<<<<<<< HEAD
       "resources": ["login.html", "lock.html", "lock.js"],
-=======
-      "resources": ["login.html"],
->>>>>>> b67b2d9283b99b207253c8d4adc2fa5684397d7e
       "matches": ["<all_urls>"]
     }
   ]

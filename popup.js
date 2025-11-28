@@ -422,7 +422,6 @@ Return only the websites that can(if locked it would be nice) be locked as a JSO
 
   cancelLogoutButton.addEventListener('click', () => {
     showSection('main-section');
-    logoutUsernameInput.value = '';
     logoutPasswordInput.value = '';
   });
 });

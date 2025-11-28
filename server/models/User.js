@@ -1,19 +1,40 @@
 const pool = require('../config/database');
 const bcrypt = require('bcrypt');
 
-const useMemory = String(process.env.DB_USE_MEMORY || '').toLowerCase() === 'true';
+const useEnvMemory = String(process.env.DB_USE_MEMORY || '').toLowerCase() === 'true';
+let forceMemory = false;
 let memUsers = new Map();
 let memId = 1;
+
+function useMemory() {
+  return useEnvMemory || forceMemory;
+}
 
 class User {
   static async create(email, password, pin) {
     const passwordHash = await bcrypt.hash(password, 10);
-    if (!useMemory && pool) {
-      const result = await pool.query(
-        'INSERT INTO users (email, password_hash, pin) VALUES ($1, $2, $3) RETURNING id, email, pin, created_at',
-        [email.toLowerCase(), passwordHash, pin]
-      );
-      return result.rows[0];
+    if (!useMemory() && pool) {
+      try {
+        if (pool.type === 'mysql') {
+          await pool.query(
+            'INSERT INTO users (email, password_hash, pin) VALUES ($1, $2, $3)',
+            [email.toLowerCase(), passwordHash, pin]
+          );
+          const after = await pool.query(
+            'SELECT id, email, pin, created_at FROM users WHERE email = $1',
+            [email.toLowerCase()]
+          );
+          return after.rows[0];
+        } else {
+          const result = await pool.query(
+            'INSERT INTO users (email, password_hash, pin) VALUES ($1, $2, $3) RETURNING id, email, pin, created_at',
+            [email.toLowerCase(), passwordHash, pin]
+          );
+          return result.rows[0];
+        }
+      } catch (e) {
+        forceMemory = true;
+      }
     }
     const key = email.toLowerCase();
     if (memUsers.has(key)) {
@@ -25,12 +46,16 @@ class User {
   }
 
   static async findByEmail(email) {
-    if (!useMemory && pool) {
-      const result = await pool.query(
+    if (!useMemory() && pool) {
+      try {
+        const result = await pool.query(
         'SELECT * FROM users WHERE email = $1',
         [email.toLowerCase()]
-      );
-      return result.rows[0];
+        );
+        return result.rows[0];
+      } catch (e) {
+        forceMemory = true;
+      }
     }
     return memUsers.get(email.toLowerCase()) || null;
   }
@@ -50,4 +75,3 @@ class User {
 }
 
 module.exports = User;
-
